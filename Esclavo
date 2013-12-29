@@ -1,0 +1,125 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+entity Esclavo is
+	Port(
+		A,B,C,start,s1,s2,clk,BTN0,BTN2: IN std_logic;
+		run: OUT std_logic
+		);
+		
+end Esclavo;
+
+architecture Behavioral of Esclavo is
+
+COMPONENT Maestro
+	PORT(
+		clk : IN std_logic;
+		run : IN std_logic;          
+		A : OUT std_logic;
+		B : OUT std_logic;
+		C : OUT std_logic;
+		start : OUT std_logic;
+		);
+	END COMPONENT;
+
+VARIABLE contador: integer:=0;
+
+begin
+
+Inst_Maestro: Maestro PORT MAP(
+		clk => ,clk
+		run => run,
+		A => A,
+		B => B,
+		C => C,
+		start => start, 
+	);
+
+Process (clk)
+
+	begin
+	
+		if clk'event and clk='1' and ((s1='1' and s2='1') OR (s1='0' and s2='0')) then
+			
+			case estados is
+				when "000" =>
+				contador=2;
+				when "001" =>
+					if BTN0='0' then				
+					contador=10;
+					else
+					contador=3;
+					end if;
+				contador=
+				when "010" =>
+				contador=2;
+				when "011" =>
+					if BTN2='0' then				
+					contador=10;
+					else
+					contador=3;
+					end if;
+				when "100" =>
+				contador=2;
+				when "101" =>
+				contador=2;
+				when OTHERS =>
+				UNAFFECTED;
+			end case
+			
+		if clk'event and clk='1' and s1='1' and s2='0' then
+		
+				case estados is
+				when "000" =>
+				contador=2;
+				when "001" =>
+					if BTN0='0' then				
+					contador=5;
+					else
+					contador=3;
+					end if;
+				when "010" =>
+				contador=2;
+				when "011" =>
+					if BTN0='0' then				
+					contador=15;
+					else
+					contador=3;
+					end if;
+				when "100" =>
+				contador=2;
+				when "101" =>
+				contador=2;
+				when OTHERS =>
+				UNAFFECTED;
+			end case
+	
+		if clk'event and clk='1' and s1='0' and s2='1' then
+		
+				case estados is
+				when "000" =>
+				contador=2;
+				when "001" =>
+					if BTN0='0' then				
+					contador=15;
+					else
+					contador=3;
+					end if;
+				when "010" =>
+				contador=2;
+				when "011" =>
+					if BTN0='0' then				
+					contador=5;
+					else
+					contador=3;
+					end if;
+				when "100" =>
+				contador=2;
+				when "101" =>
+				contador=2;
+				when OTHERS =>
+				UNAFFECTED;
+			end case
+	
+estados <= A&B&C;
+end Behavioral;
