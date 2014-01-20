@@ -1,0 +1,383 @@
+
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+
+ 
+ENTITY Esclavo_tb IS
+END Esclavo_tb;
+ 
+ARCHITECTURE behavior OF Esclavo_tb IS 
+ 
+    -- Component Declaration for the Unit Under Test (UUT)
+ 
+    COMPONENT Esclavo
+    PORT(
+         estado : IN  std_logic_vector(2 downto 0);
+         reset : IN  std_logic;
+         start : IN  std_logic;
+         s1 : IN  std_logic;
+         s2 : IN  std_logic;
+         clk : IN  std_logic;
+         BTN0 : IN  std_logic;
+         BTN2 : IN  std_logic;
+         OK : IN  std_logic;
+         run : OUT  std_logic;
+         contador : OUT  std_logic_vector(3 downto 0)
+        );
+    END COMPONENT;
+    
+
+   --Inputs
+   signal estado : std_logic_vector(2 downto 0) := (others => '0');
+   signal reset : std_logic := '0';
+   signal start : std_logic := '0';
+   signal s1 : std_logic := '0';
+   signal s2 : std_logic := '0';
+   signal clk : std_logic := '0';
+   signal BTN0 : std_logic := '0';
+   signal BTN2 : std_logic := '0';
+   signal OK : std_logic := '0';
+
+ 	--Outputs
+   signal run : std_logic;
+   signal contador : std_logic_vector(3 downto 0):="0000";
+
+   -- Clock period definitions
+   constant clk_period : time := 10 ns;
+ 
+BEGIN
+ 
+	-- Instantiate the Unit Under Test (UUT)
+   uut: Esclavo PORT MAP (
+          estado => estado,
+          reset => reset,
+          start => start,
+          s1 => s1,
+          s2 => s2,
+          clk => clk,
+          BTN0 => BTN0,
+          BTN2 => BTN2,
+          OK => OK,
+          run => run,
+          contador => contador
+        );
+
+ clk<= not clk after 10 ns;  
+   -- Stimulus process
+   stim_proc: process
+   begin		
+	
+	wait for 100 ns;
+--     reset<='1';
+--        WAIT FOR 10 ns; 
+--				ASSERT contador="0000" and run='0'
+--				REPORT "Reset malfunction"
+--				SEVERITY failure;
+--			S1<='0';
+--			S2<='0';
+--			BTN0<='0';
+--			estado<="000";
+--			WAIT FOR 10 ns;
+--		--	WAIT FOR 10*frecuencia*clk_periodo; --10000000000 ns;
+--			ASSERT contador ="1010" --estado="001"
+--			REPORT "error de tiempos en 000"
+--			SEVERITY failure;
+--			
+--			S1<='1';
+--			S2<='1';
+--			BTN0<='0';
+--			estado<="000";
+--			WAIT FOR 10 ns;
+--			--WAIT FOR 10*frecuencia*clk_periodo;--10000000000 ns;
+--			ASSERT contador="1010"
+--			REPORT "error de tiempos en 000"
+--			SEVERITY failure;
+--			
+--		--	WAIT UNTIL CLK = '1';
+--			S1<= '0';
+--			S2 <= '0';
+--			BTN0 <='1';
+--			estado<="000";
+--			WAIT FOR 10 ns;
+--		--	WAIT FOR 3*frecuencia*clk_periodo;--3000000000 ns;
+--			ASSERT contador="0011"
+--			REPORT "error de tiempos en 000"
+--			SEVERITY failure;
+			
+--			WAIT UNTIL CLK = '1';
+--			S1<= '1';
+--			S2 <= '1';
+--			BTN0 <='1';
+--			estado<="000";
+--			WAIT FOR 3*frecuencia*clk_periodo;--3000000000 ns;
+----			ASSERT estado="001"
+----			REPORT "error de tiempos en 000"
+----			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1<= '0';
+--			S2 <= '0';			
+--			estado<="001";
+--			WAIT FOR 2*frecuencia*clk_periodo;--2000000000 ns;
+----			ASSERT estado="010"
+----			REPORT "error de tiempos en 000"
+----			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1<= '1';
+--			S2 <= '1';			
+--			estado<="001";
+--			WAIT FOR 2*frecuencia*clk_periodo;--2000000000 ns;
+----			ASSERT estado="010"
+----			REPORT "error de tiempos en 000"
+----			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1<= '0';
+--			S2 <= '0';
+--			estado<="010";
+--			WAIT FOR 2*frecuencia*clk_periodo;--2000000000 ns;
+----			ASSERT estado="011";
+----			REPORT "error de tiempos en 010"
+----			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1<= '1';
+--			S2 <= '1';
+--			estado<="010";
+--			WAIT FOR 2*frecuencia*clk_periodo;--2000000000 ns;
+----			ASSERT estado="011";
+----			REPORT "error de tiempos en 010"
+----			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1<= '0';
+--			S2 <= '0';
+--			BTN2 <= '0';
+--			estado<="011";
+--			WAIT FOR 10*frecuencia*clk_periodo;--10000000000 ns;
+----			ASSERT estado="100"
+----			REPORT "error de tiempos en 011"
+----			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1<= '1';
+--			S2 <= '1';
+--			BTN2 <= '0';
+--			estado<="011";
+--			WAIT FOR 10*frecuencia*clk_periodo;--10000000000 ns;
+----			ASSERT estado="100"
+----			REPORT "error de tiempos en 011"
+----			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1<= '0';
+--			S2 <= '0';
+--			BTN2 <= '1';
+--			estado<="011";
+--			WAIT FOR 3*frecuencia*clk_periodo;--3000000000 ns;
+----			ASSERT estado="100"
+----			REPORT "error de tiempos en 011"
+----			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1<= '1';
+--			S2 <= '1';
+--			BTN2 <= '1';
+--			estado<="011";
+--			WAIT FOR 3*frecuencia*clk_periodo;--3000000000 ns;
+----			ASSERT estado="100"
+----			REPORT "error de tiempos en 011"
+----			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1<= '0';
+--			S2 <= '0';
+--			estado<="100";
+--			WAIT FOR 2*frecuencia*clk_periodo;--2000000000 ns;
+----			ASSERT estado="101"
+----			REPORT "error de tiempos en 100"
+----			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1<= '1';
+--			S2 <= '1';
+--			estado<="100";
+--			WAIT FOR 2*frecuencia*clk_periodo;--2000000000 ns;
+--			ASSERT estado="101"
+--			REPORT "error de tiempos en 100"
+--			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1<= '0';
+--			S2 <= '0';
+--			estado<="101";
+--			WAIT FOR 2*frecuencia*clk_periodo;--2000000000 ns;
+--			ASSERT estado="000"
+--			REPORT "error de tiempos en 101"
+--			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1<= '1';
+--			S2 <= '1';
+--			estado<="101";
+--			WAIT FOR 2*frecuencia*clk_periodo;--2000000000 ns;
+--			ASSERT estado="000"
+--			REPORT "error de tiempos en 101"
+--			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1 <= '1';
+--			S2 <= '0'; 
+--			BTN0 <='0';
+--			estado<="000";
+--			WAIT FOR 15*frecuencia*clk_periodo;--15000000000 ns;
+--			ASSERT estado="001"
+--			REPORT "error de tiempos en 000"
+--			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1 <= '1';
+--			S2 <= '0';
+--			BTN0 <='1';
+--			estado<="000";
+--			WAIT FOR 3*frecuencia*clk_periodo;--3000000000 ns;
+--			ASSERT estado="001"
+--			REPORT "error de tiempos en 000"
+--			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1 <= '1';
+--			S2 <= '0';
+--			estado<="001";
+--			WAIT FOR 2*frecuencia*clk_periodo;--2000000000 ns;
+--			ASSERT estado="010"
+--			REPORT "error de tiempos en 000"
+--			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1 <= '1';
+--			S2 <= '0';
+--			estado<="010";
+--			WAIT FOR 2*frecuencia*clk_periodo;--2000000000 ns;
+--			ASSERT estado="011";
+--			REPORT "error de tiempos en 010"
+--			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1 <= '1';
+--			S2 <= '0';
+--			BTN0 <= '0';
+--			estado<="011";
+--			WAIT FOR 5*frecuencia*clk_periodo;--5000000000 ns;
+--			ASSERT estado="100"
+--			REPORT "error de tiempos en 011"
+--			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1 <= '1';
+--			S2 <= '0';
+--			BTN0 <= '1';
+--			estado<="011";
+--			WAIT FOR 3*frecuencia*clk_periodo;--3000000000 ns;
+--			ASSERT estado="100"
+--			REPORT "error de tiempos en 011"
+--			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1 <= '1';
+--			S2 <= '0';
+--			estado<="100";
+--			WAIT FOR 2*frecuencia*clk_periodo;--2000000000 ns;
+--			ASSERT estado="101"
+--			REPORT "error de tiempos en 100"
+--			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1 <= '1';
+--			S2 <= '0';
+--			estado<="101";
+--			WAIT FOR 2*frecuencia*clk_periodo;--2000000000 ns;
+--			ASSERT estado="000"
+--			REPORT "error de tiempos en 101"
+--			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1 <= '0';
+--			S2 <= '1';
+--			BTN2 <='0';
+--			estado<="000";
+--			WAIT FOR 5*frecuencia*clk_periodo;--5000000000 ns;
+--			ASSERT estado="001"
+--			REPORT "error de tiempos en 000"
+--			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1 <= '0';
+--			S2 <= '1';
+--			BTN2 <='1';
+--			estado<="000";
+--			WAIT FOR 3*frecuencia*clk_periodo;--3000000000 ns;
+--			ASSERT estado="001"
+--			REPORT "error de tiempos en 000"
+--			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1 <= '0';
+--			S2 <= '1';
+--			estado<="001";
+--			WAIT FOR 2*frecuencia*clk_periodo;--2000000000 ns;
+--			ASSERT estado="010"
+--			REPORT "error de tiempos en 000"
+--			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1 <= '0';
+--			S2 <= '1';
+--			estado<="010";
+--			WAIT FOR 2*frecuencia*clk_periodo;--2000000000 ns;
+--			ASSERT estado="011";
+--			REPORT "error de tiempos en 010"
+--			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1 <= '0';
+--			S2 <= '1';
+--			BTN2 <= '0';
+--			estado<="011";
+--			WAIT FOR 15*frecuencia*clk_periodo;--15000000000 ns;
+--			ASSERT estado="100"
+--			REPORT "error de tiempos en 011"
+--			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1 <= '0';
+--			S2 <= '1';
+--			BTN2 <= '1';
+--			estado<="011";
+--			WAIT FOR 3*frecuencia*clk_periodo;--3000000000 ns;
+--			ASSERT estado="100"
+--			REPORT "error de tiempos en 011"
+--			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1 <= '0';
+--			S2 <= '1';
+--			estado<="100";
+--			WAIT FOR 2*frecuencia*clk_periodo;--2000000000 ns;
+--			ASSERT estado="101"
+--			REPORT "error de tiempos en 100"
+--			SEVERITY failure;
+--			
+--			WAIT UNTIL CLK = '1';
+--			S1 <= '0';
+--			S2 <= '1';
+--			estado<="101";
+--			WAIT FOR 2*frecuencia*clk_periodo;--2000000000 ns;
+--			ASSERT estado="000"
+--			REPORT "error de tiempos en 101"
+--			SEVERITY failure;
+			
+			end process;
+
+END;
