@@ -1,0 +1,42 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+
+
+entity Contador is
+ GENERIC(
+		frecuencia: integer
+		);
+	Port(
+		cuenta: IN std_logic_vector(3 DOWNTO 0);
+		clk,reset: IN std_logic;
+		OK: OUT std_logic
+		);
+end Contador;
+
+architecture Behavioral of Contador is
+
+	SIGNAL count: std_logic_vector(3 DOWNTO 0):="0000";
+	
+begin
+
+	process (clk,reset) 
+		begin
+		if reset='1' then 
+			count <= (others => '0');
+			OK<='0';
+			
+		elsif clk='1' and clk'event then
+         count <= count + 1;
+			if cuenta=count then
+				OK<='1';
+				count<="0000";
+			elsif count="0001" then
+			OK<='0';
+			end if;
+		end if;
+end process;
+
+end Behavioral;
+
