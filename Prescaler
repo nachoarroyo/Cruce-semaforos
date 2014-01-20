@@ -1,0 +1,43 @@
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.all;
+
+
+
+
+entity Preescaler is
+	GENERIC(
+		frecuencia: integer:= 25000000
+		);
+  port (
+    clk_50Mhz : in  std_logic;
+    reset    : in  std_logic;
+    clk_1Hz   : out std_logic);	
+end Preescaler;
+
+architecture Behavioral of Preescaler is
+
+	signal prescaler : unsigned(24 downto 0);
+	signal clk_1Hz_i : std_logic;
+
+begin
+ process (clk_50Mhz, reset)
+  begin  -- process gen_clk
+    if reset = '1' then
+      clk_1Hz_i   <= '0';
+      prescaler   <= (others => '0');
+    elsif clk_50Mhz'event and clk_50Mhz='1' then
+	 if prescaler = frecuencia then     
+        prescaler   <= (others => '0');
+        clk_1Hz_i   <= not clk_1Hz_i;
+      else
+        prescaler <= prescaler + 1;
+      end if;
+    end if;
+  end process;
+
+clk_1Hz <= clk_1Hz_i;
+
+
+end Behavioral;
