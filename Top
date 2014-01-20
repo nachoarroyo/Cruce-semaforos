@@ -1,0 +1,129 @@
+
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.NUMERIC_STD.all;
+
+
+
+entity Top_Cruce is
+	GENERIC(
+		frecuencia: integer:= 25000000
+	);
+	
+	PORT(
+		clk_50Mhz,reset,BTN0,BTN2,s1,s2: IN std_logic;
+		LD1,LD2,LD3,LD5,LD6,LD7: OUT std_logic
+		);
+end Top_Cruce;
+
+architecture Behavioral of Top_Cruce is
+
+	COMPONENT Contador
+		PORT(
+			cuenta : IN std_logic_vector(3 downto 0);
+			clk : IN std_logic;
+			reset : IN std_logic;          
+			OK : OUT std_logic
+			);
+		END COMPONENT;
+		
+	COMPONENT Esclavo
+	PORT(
+		estado : IN std_logic_vector(2 downto 0);
+		reset : IN std_logic;
+		start : IN std_logic;
+		s1 : IN std_logic;
+		s2 : IN std_logic;
+		clk : IN std_logic;
+		BTN0 : IN std_logic;
+		BTN2 : IN std_logic;
+		OK : IN std_logic;          
+		run : OUT std_logic;
+		contador : OUT std_logic_vector(3 downto 0)
+		);
+	END COMPONENT;
+	
+	COMPONENT Maestro
+	PORT(
+		clk : IN std_logic;
+		run : IN std_logic;
+		reset : IN std_logic;          
+		start : OUT std_logic;
+		LD1 : OUT std_logic;
+		LD2 : OUT std_logic;
+		LD3 : OUT std_logic;
+		LD5 : OUT std_logic;
+		LD6 : OUT std_logic;
+		LD7 : OUT std_logic;
+		estado : OUT std_logic_vector(2 downto 0)
+		);
+	END COMPONENT;
+	
+	COMPONENT Preescaler
+	GENERIC(
+		frecuencia: integer
+		);
+	PORT(
+		clk_50Mhz : IN std_logic;
+		reset : IN std_logic;          
+		clk_1Hz : OUT std_logic
+		);
+	END COMPONENT;
+	
+SIGNAL OK_i,run_i,clk_i,start_i:std_logic;
+SIGNAL estado_i:std_logic_vector(2 DOWNTO 0);
+SIGNAL contador_i:std_logic_vector(3 DOWNTO 0);
+
+
+
+	
+begin
+	
+	Inst_Preescaler: Preescaler
+	GENERIC map (
+		frecuencia => frecuencia
+		)
+	PORT MAP(
+		clk_50Mhz =>clk_50Mhz ,
+		reset =>reset ,
+		clk_1Hz =>clk_i
+	);
+	
+	Inst_Contador: Contador PORT MAP(
+		cuenta => contador_i,
+		clk =>clk_i,
+		reset =>reset ,
+		OK => OK_i
+	);
+	
+	Inst_Esclavo: Esclavo PORT MAP(
+		estado =>estado_i ,
+		reset =>reset ,
+		start =>start_i ,
+		s1 =>s1 ,
+		s2 =>s1 ,
+		clk =>clk_i ,
+		BTN0 =>BTN0 ,
+		BTN2 =>BTN2 ,
+		OK => OK_i,
+		run =>run_i,
+		contador => contador_i
+	);
+	
+	Inst_Maestro: Maestro PORT MAP(
+		clk =>clk_i,
+		run =>run_i ,
+		reset =>reset ,
+		start =>start_i ,
+		LD1 =>LD1 ,
+		LD2 =>LD2 ,
+		LD3 =>LD3 ,
+		LD5 =>LD5 ,
+		LD6 =>LD6,
+		LD7 =>LD7 ,
+		estado => estado_i
+	);
+
+
+end Behavioral;
+
