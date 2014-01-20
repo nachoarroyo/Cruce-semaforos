@@ -1,0 +1,74 @@
+
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+use IEEE.NUMERIC_STD.all;
+
+ENTITY Contador_tb IS
+END Contador_tb;
+ 
+ARCHITECTURE behavior OF Contador_tb IS 
+ 
+    -- Component Declaration for the Unit Under Test (UUT)
+
+
+	
+    COMPONENT Contador
+	 GENERIC(
+		frecuencia: integer
+		);
+    PORT(
+         cuenta : IN  std_logic_vector(3 downto 0);
+         clk : IN  std_logic;
+         reset : IN  std_logic;
+         OK : OUT  std_logic
+        );
+    END COMPONENT;
+    
+	constant CLOCK_PERIOD: time := 20 ns;
+   --Inputs
+   signal cuenta : std_logic_vector(3 downto 0) := (others => '0');
+   signal clk : std_logic := '0';
+   signal reset : std_logic := '0';
+	
+
+ 	--Outputs
+   signal OK : std_logic:='0';
+
+	constant	frecuencia: integer :=4 ;
+ 
+BEGIN
+ 
+	-- Instantiate the Unit Under Test (UUT)
+	uut: Contador
+		generic map (
+		 frecuencia => frecuencia) 
+		 PORT MAP (
+          cuenta => cuenta,
+          clk => clk,
+          reset => reset,
+          OK => OK
+        );
+
+   clk<= not clk after 10 ns;
+	
+	tb: process
+	
+	begin 
+	
+	reset<='1';
+        WAIT FOR 10 ns; 
+				ASSERT OK='0'
+				REPORT "Reset malfunction"
+				SEVERITY failure;
+	
+	reset<='0';
+	cuenta<="1111";
+		wait for 15*frecuencia*CLOCK_PERIOD;
+		ASSERT OK='1'
+		REPORT "Fallo en contador 15"
+		SEVERITY failure;
+
+      wait;
+   end process;
+
+END;
