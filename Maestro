@@ -1,0 +1,100 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+
+
+
+entity Maestro is
+	Port(
+		clk, run, reset: IN std_logic;
+		start,LD1,LD2,LD3,LD5,LD6,LD7: OUT std_logic;
+		estado: OUT std_logic_vector (2 DOWNTO 0)
+		);
+end Maestro;
+
+architecture Behavioral of Maestro is
+	SIGNAL pstate : std_logic_vector (2 DOWNTO 0);
+	SIGNAL n_state:std_logic_vector(2 DOWNTO 0);
+
+begin
+	Process (clk, run, reset)
+		begin
+		
+			if reset = '1' then
+				pstate <= "000";
+				start<='1';
+				
+			elsif clk='1' AND clk'event then
+			
+				if run = '1' then
+					pstate<= n_state;
+					start <= '1';
+					
+				else
+					start <= '0';
+					
+				end if;
+				
+			end if;
+			
+	end Process;
+
+estado <= pstate;
+
+	n_state <= "001" when (pstate = "000") else
+				  "010" when (pstate = "001") else
+				  "011" when (pstate = "010") else
+				  "100" when (pstate = "011") else
+				  "101" when (pstate = "100") else
+				  "000";
+	
+	LD1	 <= '1' when (pstate = "000") else
+				 '0' when (pstate = "001") else
+				 '0' when (pstate = "010") else
+				 '0' when (pstate = "011") else
+				 '0' when (pstate = "100") else
+				 '0' when (pstate = "101") else
+				 '0';
+
+	LD2	 <= '0' when (pstate = "000") else
+				 '1' when (pstate = "001") else
+				 '0' when (pstate = "010") else
+				 '0' when (pstate = "011") else
+				 '0' when (pstate = "100") else
+				 '0' when (pstate = "101") else
+				 '0';
+
+	LD3	 <= '0' when (pstate = "000") else
+				 '0' when (pstate = "001") else
+				 '1' when (pstate = "010") else
+				 '1' when (pstate = "011") else
+				 '1' when (pstate = "100") else
+				 '1' when (pstate = "101") else
+				 '0';
+
+	LD5	 <= '0' when (pstate = "000") else
+				 '0' when (pstate = "001") else
+				 '0' when (pstate = "010") else
+				 '1' when (pstate = "011") else
+				 '0' when (pstate = "100") else
+				 '0' when (pstate = "101") else
+				 '0';
+				 
+	LD6	 <= '0' when (pstate = "000") else
+				 '0' when (pstate = "001") else
+				 '0' when (pstate = "010") else
+				 '0' when (pstate = "011") else
+				 '1' when (pstate = "100") else
+				 '0' when (pstate = "101") else
+				 '0';	 
+				 
+	LD7	 <= '1' when (pstate = "000") else
+				 '1' when (pstate = "001") else
+				 '1' when (pstate = "010") else
+				 '0' when (pstate = "011") else
+				 '0' when (pstate = "100") else
+				 '1' when (pstate = "101") else
+				 '0';
+
+
+end Behavioral;
+
