@@ -1,0 +1,75 @@
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+ 
+
+ 
+ENTITY preescaler_tb IS
+END preescaler_tb;
+ 
+ARCHITECTURE behavior OF preescaler_tb IS 
+ 
+    -- Component Declaration for the Unit Under Test (UUT)
+ 
+    COMPONENT preescaler
+	 
+	 
+	GENERIC(
+		frecuencia: integer:= 4
+		);
+    PORT(
+         clk_50Mhz : IN  std_logic;
+         reset : IN  std_logic;
+         clk_1Hz : OUT  std_logic
+        );
+    END COMPONENT;
+
+   constant CLOCK_PERIOD: time := 20 ns;    
+
+   --Inputs
+	signal frecuencia: integer:= 4; 
+   signal clk_50Mhz : std_logic := '0';
+   signal reset : std_logic;
+
+ 	--Outputs
+   signal clk_1Hz : std_logic;
+
+ 
+ 
+BEGIN
+ 
+	-- Instantiate the Unit Under Test (UUT)
+   uut: preescaler PORT MAP (
+          clk_50Mhz => clk_50Mhz,
+          reset => reset,
+          clk_1Hz => clk_1Hz
+        );
+
+
+   reset<= '1' after 0.25 * CLOCK_PERIOD, '0' after 0.75 * CLOCK_PERIOD;
+
+   clk_50MHz <= not clk_50MHz after CLOCK_PERIOD / 2;
+ 
+ -- Stimulus process
+   stim_proc: process
+     variable i: positive := 1;	
+   begin
+     wait until reset = '1';
+	  wait for 0.01 * CLOCK_PERIOD;
+     assert clk_1Hz='0'
+       report" reset mal funtion"
+       severity error;
+  
+     for i in 1 to frecuencia*4 loop
+	    wait until clk_50MHz = '1';
+     end loop;
+     wait for 0.01 * CLOCK_PERIOD;
+     assert clk_1Hz='1'
+       report" error del prescaler"
+         severity error;
+
+     assert false
+       report " ok :)"
+       severity failure;
+   end process;
+
+END;
