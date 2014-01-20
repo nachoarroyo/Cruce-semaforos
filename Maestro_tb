@@ -1,0 +1,135 @@
+
+LIBRARY ieee;
+USE ieee.std_logic_1164.ALL;
+ 
+
+ 
+ENTITY Maestro_tb IS
+END Maestro_tb;
+
+ARCHITECTURE behavioral OF maestro_tb IS 
+
+	COMPONENT maestro
+          PORT(
+                  run,clk,reset: IN std_logic;      
+                  start,LD1,LD2,LD3,LD5,LD6,LD7 : OUT std_logic;
+						estado:OUT std_logic_vector(2 downto 0)
+                  );
+          END COMPONENT;
+
+          SIGNAL run,clk,reset:  std_logic:= '0';
+			 SIGNAL start,LD1,LD2,LD3,LD5,LD6,LD7:  std_logic:='1';
+          SIGNAL estado,pstate:  std_logic_vector(2 downto 0):= "000";
+          
+
+  BEGIN
+
+  -- Component Instantiation
+          uut: maestro
+				PORT MAP(
+                 run=>run,
+					  clk=>clk,
+					  reset=>reset,
+					  start=>start,
+					  LD1=>LD1,
+					  LD2=>LD2,
+					  LD3=>LD3,
+					  LD5=>LD5,
+					  LD6=>LD6,
+					  LD7=>LD7,
+					  estado=>estado
+          );
+
+clk<= not clk after 10 ns;
+
+     tb : PROCESS
+     BEGIN
+-- test reset
+		reset<='1';
+        WAIT FOR 10 ns; 
+				ASSERT estado="000"
+				REPORT "Reset malfunction"
+				SEVERITY failure;
+ -- test cambio de estado
+		reset<='0';
+		run<='1';
+		estado<="000";
+				WAIT FOR 100 ns;
+				ASSERT estado="001"
+				REPORT "No ha cambiado de estado 001"
+				SEVERITY failure;
+		run<='0';
+		wait for 10ns;
+		run<='1';
+		estado<="001";
+				WAIT FOR 10 ns;
+				ASSERT estado="010"
+				REPORT "No ha cambiado de estado 010"
+				SEVERITY failure;
+		run<='1';
+		estado<="010";
+				WAIT FOR 10 ns;
+				ASSERT estado="011"
+				REPORT "No ha cambiado de estado 011"
+				SEVERITY failure;
+		run<='1';
+		estado<="011";
+				WAIT FOR 10 ns;
+				ASSERT estado="100"
+				REPORT "No ha cambiado de estado 100"
+				SEVERITY failure;
+		run<='1';
+		estado<="100";
+				WAIT FOR 10 ns;
+				ASSERT estado="101"
+				REPORT "No ha cambiado de estado 101"
+				SEVERITY failure;
+		run<='1';
+		estado<="101";
+				WAIT FOR 10 ns;
+				ASSERT estado="000"
+				REPORT "No ha cambiado de estado 000"
+				SEVERITY failure;
+--test de start
+		run<='1';
+				WAIT FOR 10 ns;
+				ASSERT start='1'
+				REPORT "Fallo en el start"
+				SEVERITY failure;		
+--test de luces			
+		estado<="000";
+				WAIT FOR 10 ns;
+				ASSERT LD1='1' AND LD2='0' AND LD3='0' AND LD5='0' AND LD6='0' AND LD7='1'
+				REPORT "Problema en los leds 2 y 7"
+				SEVERITY failure;
+		estado<="001";
+				WAIT FOR 10 ns;
+				ASSERT LD1='0' AND LD2='1' AND LD3='0' AND LD5='0' AND LD6='0' AND LD7='1'
+				REPORT "Problema en los leds 3 y 7"
+				SEVERITY failure;
+		estado<="010";
+				WAIT FOR 10 ns;
+				ASSERT LD1='0' AND LD2='0' AND LD3='1' AND LD5='0' AND LD6='0' AND LD7='1'
+				REPORT "Problema en los leds 3 y 5"
+				SEVERITY failure;
+		estado<="011";
+				WAIT FOR 10 ns;
+				ASSERT LD1='0' AND LD2='0' AND LD3='1' AND LD5='1' AND LD6='0' AND LD7='0'
+				REPORT "Problema en los leds 3 y 6"
+				SEVERITY failure;
+		estado<="100";
+				WAIT FOR 10 ns;
+				ASSERT LD1='0' AND LD2='0' AND LD3='1' AND LD5='0' AND LD6='1' AND LD7='0'
+				REPORT "Problema en los leds 3 y 7"
+				SEVERITY failure;
+		estado<="101";
+				WAIT FOR 10 ns;
+				ASSERT LD1='0' AND LD2='0' AND LD3='1' AND LD5='0' AND LD6='0' AND LD7='1'
+				REPORT "Problema en los leds 1 y 7"
+				SEVERITY failure;
+	
+        wait; -- will wait forever
+     END PROCESS tb;
+  --  End Test Bench 
+
+  END;
